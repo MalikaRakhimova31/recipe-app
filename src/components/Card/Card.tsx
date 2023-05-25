@@ -7,7 +7,7 @@ interface Props {
   name: string | undefined;
   description: string;
   image: string;
-  time: string | undefined;
+  time: Date | undefined;
   ingredients: string;
   id: number;
 }

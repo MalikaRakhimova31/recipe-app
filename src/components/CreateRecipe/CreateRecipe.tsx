@@ -6,6 +6,10 @@ import { useRouter } from "next/router";
 import { AiOutlineHome } from "react-icons/ai";
 import axios from "axios";
 import Link from "next/link";
+import { v4 as uuid } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { addRecipe } from "../../../store/slices/recipeSlice";
+import { RecipeProps } from "@/types/types";
 
 const ACCESS_KEY = "nz7j2tJ7DCXC66-vgMGNd-77ieLScyOHgi8ECaUatOU";
 
@@ -13,12 +17,16 @@ export default function CreatRecipe() {
   const [image, setImage] = useState("");
   const now = new Date();
   const router = useRouter();
-  const [state, setState] = useState({
+  const dispatch = useDispatch();
+  const recipes = useSelector((state: any) => state.recipes.recipes);
+
+  const [state, setState] = useState<RecipeProps>({
+    id: 0,
     name: "",
     description: "",
     ingredients: "",
     created_at: now,
-    image: image,
+    image: "",
   });
 
   useEffect(() => {
@@ -43,6 +51,12 @@ export default function CreatRecipe() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const newRecipe = {
+      ...state,
+      id: recipes.length + 1,
+      image: image,
+    };
+    dispatch(addRecipe(newRecipe));
     try {
       const result = await request
         .post("/recipes", {

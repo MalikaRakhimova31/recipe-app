@@ -11,6 +11,9 @@ import {
 } from "react-icons/ai";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { RecipeProps } from "@/types/types";
+import { deleteRecipe } from "../../../store/slices/recipeSlice";
 
 interface Props {
   name: string;
@@ -24,18 +27,33 @@ interface Props {
 export default function RecipeItem() {
   const [item, setItem] = useState<Props | undefined>();
   const { query, push } = useRouter();
+  const recipes = useSelector((state: any) => state.recipes.recipes);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    request.get(`/recipes/${query.id}`).then((res) => setItem(res.data));
-  }, []);
+    // request.get(`/recipes/${query.id}`).then((res) => {
+    //   console.log("iteeem", res);
+    //   setItem(res.data);
+    // });
+    setItem(() =>
+      recipes.find((el: RecipeProps) => el.id === Number(query.id))
+    );
+  }, [query.id]);
+
+  console.log("item", item);
 
   const handleDelete = () => {
-    request.delete(`/recipes/${query.id}`).then(() => {
-      toast.info("Successfully deleted", {
-        toastId: "success2",
-      });
-      push("/");
+    // request.delete(`/recipes/${query.id}`).then(() => {
+    //   toast.info("Successfully deleted", {
+    //     toastId: "success2",
+    //   });
+    //   push("/");
+    // });
+    dispatch(deleteRecipe(Number(query.id)));
+    toast.info("Successfully deleted", {
+      toastId: "success2",
     });
+    push("/");
   };
   return (
     <>

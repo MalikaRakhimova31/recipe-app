@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RecipeProps } from "@/types/types";
+import { updateRecipe } from "../../../store/slices/recipeSlice";
 
 const ACCESS_KEY = "nz7j2tJ7DCXC66-vgMGNd-77ieLScyOHgi8ECaUatOU";
 
@@ -19,22 +22,34 @@ interface Props {
 export default function EditRecipe() {
   const now = new Date();
   const router = useRouter();
-  const [state, setState] = useState({
+  const recipes = useSelector((state: any) => state.recipes.recipes);
+  const dispatch = useDispatch();
+
+  const [state, setState] = useState<RecipeProps>({
     name: "",
     description: "",
     ingredients: "",
     created_at: now,
     image: "",
+    id: 0,
   });
 
   useEffect(() => {
-    request.get(`/recipes/${router.query.id}`).then((res) => {
-      setState({ ...res.data });
-    });
-  }, []);
+    // request.get(`/recipes/${router.query.id}`).then((res) => {
+    //   setState({ ...res.data });
+    // });
+    setState(() =>
+      recipes.find((el: RecipeProps) => el.id === Number(router.query.id))
+    );
+
+    // console.log(recipes.find(el => el.))
+  }, [router.query.id]);
+
+  console.log("state", state);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch(updateRecipe(state));
     try {
       const result = await request
         .put(`/recipes/${router.query.id}`, {

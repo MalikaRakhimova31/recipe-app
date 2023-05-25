@@ -4,31 +4,36 @@ import Container from "../Container/Container";
 import { request } from "@/services/http-client";
 import Link from "next/link";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-
-interface StateProps {
-  name: string;
-  description: string;
-  id: number;
-  ingredients: string;
-  created_at: string;
-  image: string;
-}
-[];
+import { RecipeProps } from "@/types/types";
+import { useSelector } from "react-redux";
 
 export default function MainPage() {
-  const [state, setState] = useState<StateProps[]>([]);
-  useEffect(() => {
-    request.get("/recipes").then((res) => {
-      setState(res.data);
-    });
-  }, []);
+  const [search, setSearch] = useState("");
+  const recipes = useSelector((state: any) => state.recipes.recipes);
+  const [state, setState] = useState<RecipeProps[]>(recipes);
 
-  console.log("state", state);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setState(
+      recipes.filter((recipe: RecipeProps) =>
+        recipe.name.includes(e.target.value)
+      )
+    );
+  };
 
   return (
     <>
       <main className="min-h-[87vh]">
         <Container>
+          <div className="w-full">
+            <input
+              className="w-full h-10 px-4 py-2 rounded-full text-slate-900 font-medium my-8"
+              name="search"
+              placeholder="Search Recipes"
+              value={search}
+              onChange={handleSearch}
+            />
+          </div>
           <div className="flex items-center justify-between">
             <h1 className="text-5xl">Recipes</h1>
             <Link href="/create-recipe">
@@ -40,7 +45,7 @@ export default function MainPage() {
           </div>
           <div className="mt-4 grid grid-cols-4 gap-8">
             {state.length ? (
-              state?.map((recipe, id) => (
+              state?.map((recipe: RecipeProps) => (
                 <Card
                   name={recipe.name}
                   description={recipe.description}
