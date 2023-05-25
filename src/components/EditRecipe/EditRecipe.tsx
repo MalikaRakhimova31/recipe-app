@@ -50,6 +50,10 @@ export default function EditRecipe() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(updateRecipe(state));
+    toast.success("Successfully edited", {
+      toastId: "success2",
+    });
+    router.push("/");
     // try {
     //   const result = await request
     //     .put(`/recipes/${router.query.id}`, {
