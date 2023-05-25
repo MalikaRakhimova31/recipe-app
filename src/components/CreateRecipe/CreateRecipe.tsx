@@ -57,6 +57,10 @@ export default function CreatRecipe() {
       image: image,
     };
     dispatch(addRecipe(newRecipe));
+    toast.success("Successfully created", {
+      toastId: "success2",
+    });
+    router.push("/");
     // try {
     //   const result = await request
     //     .post("/recipes", {
