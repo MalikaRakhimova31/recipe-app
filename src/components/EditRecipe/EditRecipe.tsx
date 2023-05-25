@@ -50,20 +50,20 @@ export default function EditRecipe() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(updateRecipe(state));
-    try {
-      const result = await request
-        .put(`/recipes/${router.query.id}`, {
-          ...state,
-        })
-        .then(() => {
-          toast.success("Successfully edited", {
-            toastId: "success2",
-          });
-          router.push("/");
-        });
-    } catch (error) {
-      console.log("error", error);
-    }
+    // try {
+    //   const result = await request
+    //     .put(`/recipes/${router.query.id}`, {
+    //       ...state,
+    //     })
+    //     .then(() => {
+    //       toast.success("Successfully edited", {
+    //         toastId: "success2",
+    //       });
+    //       router.push("/");
+    //     });
+    // } catch (error) {
+    //   console.log("error", error);
+    // }
   };
 
   const handleChange = (
