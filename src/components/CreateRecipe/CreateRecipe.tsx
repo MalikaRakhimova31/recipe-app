@@ -57,21 +57,21 @@ export default function CreatRecipe() {
       image: image,
     };
     dispatch(addRecipe(newRecipe));
-    try {
-      const result = await request
-        .post("/recipes", {
-          ...state,
-          image: image,
-        })
-        .then(() => {
-          toast.success("Successfully created", {
-            toastId: "success2",
-          });
-          router.push("/");
-        });
-    } catch (error) {
-      console.log("error", error);
-    }
+    // try {
+    //   const result = await request
+    //     .post("/recipes", {
+    //       ...state,
+    //       image: image,
+    //     })
+    //     .then(() => {
+    //       toast.success("Successfully created", {
+    //         toastId: "success2",
+    //       });
+    //       router.push("/");
+    //     });
+    // } catch (error) {
+    //   console.log("error", error);
+    // }
   };
 
   const handleChange = (
